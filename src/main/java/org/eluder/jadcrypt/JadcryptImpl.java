@@ -14,32 +14,26 @@ public class JadcryptImpl implements Jadcrypt {
 
     private final String algorithm;
     private final String cipher;
+    private final Encoding encoding;
+    private final Presets presets;
 
     public JadcryptImpl() {
-        this(DEFAULT_ALGORITHM, DEFAULT_CIPHER);
+        this(DEFAULT_ALGORITHM, DEFAULT_CIPHER, Encoding.HEX, Presets.DEFAULTS);
     }
 
-    public JadcryptImpl(String algorithm, String cipher) {
+    public JadcryptImpl(String algorithm, String cipher, Encoding encoding, Presets presets) {
         this.algorithm = algorithm;
         this.cipher = cipher;
+        this.encoding = encoding;
+        this.presets = presets;
     }
 
     @Override
     public String encrypt(String plain, String password, String salt) {
-        return encrypt(plain, password, salt, Encoding.HEX, Presets.DEFAULTS);
-    }
-
-    @Override
-    public String encrypt(String plain, String password, String salt, Encoding encoding) {
-        return encrypt(plain, password, salt, encoding, Presets.DEFAULTS);
-    }
-
-    @Override
-    public String encrypt(String plain, String password, String salt, Encoding encoding, Presets presets) {
-        byte[] key = CryptUtils.pbkdf2(password, salt, presets);
+        byte[] key = CryptUtils.pbkdf2(password, salt, this.presets);
         byte[] iv = CryptUtils.md5(salt);
 
-        return encoding.encode(encryptRaw(plain.getBytes(Presets.CHARSET), key, iv));
+        return this.encoding.encode(encryptRaw(plain.getBytes(Presets.CHARSET), key, iv));
     }
 
     @Override
@@ -61,20 +55,10 @@ public class JadcryptImpl implements Jadcrypt {
 
     @Override
     public String decrypt(String encrypted, String password, String salt) {
-        return decrypt(encrypted, password, salt, Encoding.HEX, Presets.DEFAULTS);
-    }
-
-    @Override
-    public String decrypt(String encrypted, String password, String salt, Encoding encoding) {
-        return decrypt(encrypted, password, salt, encoding, Presets.DEFAULTS);
-    }
-
-    @Override
-    public String decrypt(String encrypted, String password, String salt, Encoding encoding, Presets presets) {
-        byte[] key = CryptUtils.pbkdf2(password, salt, presets);
+        byte[] key = CryptUtils.pbkdf2(password, salt, this.presets);
         byte[] iv = CryptUtils.md5(salt);
 
-        return new String(decryptRaw(encoding.decode(encrypted), key, iv), Presets.CHARSET);
+        return new String(decryptRaw(this.encoding.decode(encrypted), key, iv), Presets.CHARSET);
     }
 
     @Override

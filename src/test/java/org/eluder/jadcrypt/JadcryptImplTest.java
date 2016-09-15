@@ -6,8 +6,6 @@ import static org.junit.Assert.*;
 
 public class JadcryptImplTest {
 
-    final Jadcrypt jadcrypt = new JadcryptImpl();
-
     final String message = "Hello wörld!";
     final String password = "l5681mm0Yfi486y";
     final String salt = "cjttN5DS";
@@ -18,6 +16,7 @@ public class JadcryptImplTest {
 
     @Test
     public void testEncryptAndDecryptWithDefaults() throws Exception {
+        Jadcrypt jadcrypt = new JadcryptImpl();
         String encrypted = jadcrypt.encrypt(message, password, salt);
         String decrypted = jadcrypt.decrypt(encrypted, password, salt);
 
@@ -26,30 +25,41 @@ public class JadcryptImplTest {
 
     @Test
     public void testEncryptAndDecryptWithBase64AndSimplePresets() throws Exception {
-        String encrypted = jadcrypt.encrypt(message, password, salt, Encoding.BASE64, Presets.SIMPLE);
-        String decrypted = jadcrypt.decrypt(encrypted, password, salt, Encoding.BASE64, Presets.SIMPLE);
+        Jadcrypt jadcrypt = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
+                                             Encoding.BASE64, Presets.SIMPLE);
+        String encrypted = jadcrypt.encrypt(message, password, salt);
+        String decrypted = jadcrypt.decrypt(encrypted, password, salt);
 
         assertEquals(message, decrypted);
     }
 
     @Test
     public void testEncodingsAreDifferent() throws Exception {
-        String encrypted1 = jadcrypt.encrypt(message, password, salt, Encoding.HEX);
-        String encrypted2 = jadcrypt.encrypt(message, password, salt, Encoding.BASE64);
+        Jadcrypt jadcrypt1 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
+                                              Encoding.HEX, Presets.DEFAULTS);
+        Jadcrypt jadcrypt2 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
+                                              Encoding.BASE64, Presets.DEFAULTS);
+        String encrypted1 = jadcrypt1.encrypt(message, password, salt);
+        String encrypted2 = jadcrypt2.encrypt(message, password, salt);
 
         assertNotEquals(encrypted1, encrypted2);
     }
 
     @Test
     public void testPresetsAreDifferent() throws Exception {
-        String encrypted1 = jadcrypt.encrypt(message, password, salt, Encoding.HEX, Presets.DEFAULTS);
-        String encrypted2 = jadcrypt.encrypt(message, password, salt, Encoding.HEX, Presets.SIMPLE);
+        Jadcrypt jadcrypt1 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
+                                              Encoding.HEX, Presets.DEFAULTS);
+        Jadcrypt jadcrypt2 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
+                                              Encoding.HEX, Presets.SIMPLE);
+        String encrypted1 = jadcrypt1.encrypt(message, password, salt);
+        String encrypted2 = jadcrypt2.encrypt(message, password, salt);
 
         assertNotEquals(encrypted1, encrypted2);
     }
 
     @Test
     public void testEncryptRawAndDecryptRaw() throws Exception {
+        Jadcrypt jadcrypt = new JadcryptImpl();
         byte[] encrypted = jadcrypt.encryptRaw(rawMessage, key, iv);
         byte[] decrypted = jadcrypt.decryptRaw(encrypted, key, iv);
 
