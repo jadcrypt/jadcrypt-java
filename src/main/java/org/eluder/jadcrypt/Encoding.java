@@ -23,4 +23,12 @@ public enum Encoding {
         return decoder.apply(encoded);
     }
 
+    public static Encoding of(String value) {
+        for (Encoding encoding : Encoding.values()) {
+            if (encoding.name().equalsIgnoreCase(value)) {
+                return encoding;
+            }
+        }
+        throw new IllegalArgumentException("Invalid or unsupported encoding " + value);
+    }
 }
