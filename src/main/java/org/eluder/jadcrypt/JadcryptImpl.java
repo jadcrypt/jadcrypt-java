@@ -21,6 +21,10 @@ public class JadcryptImpl implements Jadcrypt {
         this(DEFAULT_ALGORITHM, DEFAULT_CIPHER, Encoding.HEX, Presets.DEFAULTS);
     }
 
+    public JadcryptImpl(Encoding encoding, Presets presets) {
+        this(DEFAULT_ALGORITHM, DEFAULT_CIPHER, encoding, presets);
+    }
+
     public JadcryptImpl(String algorithm, String cipher, Encoding encoding, Presets presets) {
         this.algorithm = algorithm;
         this.cipher = cipher;

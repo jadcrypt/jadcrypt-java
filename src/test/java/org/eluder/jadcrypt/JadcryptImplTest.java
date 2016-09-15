@@ -25,8 +25,7 @@ public class JadcryptImplTest {
 
     @Test
     public void testEncryptAndDecryptWithBase64AndSimplePresets() throws Exception {
-        Jadcrypt jadcrypt = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
-                                             Encoding.BASE64, Presets.SIMPLE);
+        Jadcrypt jadcrypt = new JadcryptImpl(Encoding.BASE64, Presets.SIMPLE);
         String encrypted = jadcrypt.encrypt(message, password, salt);
         String decrypted = jadcrypt.decrypt(encrypted, password, salt);
 
@@ -35,10 +34,8 @@ public class JadcryptImplTest {
 
     @Test
     public void testEncodingsAreDifferent() throws Exception {
-        Jadcrypt jadcrypt1 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
-                                              Encoding.HEX, Presets.DEFAULTS);
-        Jadcrypt jadcrypt2 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
-                                              Encoding.BASE64, Presets.DEFAULTS);
+        Jadcrypt jadcrypt1 = new JadcryptImpl(Encoding.HEX, Presets.DEFAULTS);
+        Jadcrypt jadcrypt2 = new JadcryptImpl(Encoding.BASE64, Presets.DEFAULTS);
         String encrypted1 = jadcrypt1.encrypt(message, password, salt);
         String encrypted2 = jadcrypt2.encrypt(message, password, salt);
 
@@ -47,10 +44,8 @@ public class JadcryptImplTest {
 
     @Test
     public void testPresetsAreDifferent() throws Exception {
-        Jadcrypt jadcrypt1 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
-                                              Encoding.HEX, Presets.DEFAULTS);
-        Jadcrypt jadcrypt2 = new JadcryptImpl(JadcryptImpl.DEFAULT_ALGORITHM, JadcryptImpl.DEFAULT_CIPHER,
-                                              Encoding.HEX, Presets.SIMPLE);
+        Jadcrypt jadcrypt1 = new JadcryptImpl(Encoding.HEX, Presets.DEFAULTS);
+        Jadcrypt jadcrypt2 = new JadcryptImpl(Encoding.HEX, Presets.SIMPLE);
         String encrypted1 = jadcrypt1.encrypt(message, password, salt);
         String encrypted2 = jadcrypt2.encrypt(message, password, salt);
 
